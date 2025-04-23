@@ -1,8 +1,26 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
+import axios from "axios";
 
 export default function DetailsScreen({ route }) {
   const { pokemon } = route.params;
+
+  const [pokemonApi, setPokemonApi] = useState(null);
+
+  async function getPokemonById() {
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.id}`
+    );
+    setPokemonApi(response.data);
+  }
+
+  useEffect(() => {
+    getPokemonById();
+  }, []);
+
+  if (pokemonApi == null) {
+    return <ActivityIndicator size={"large"} />;
+  }
 
   return (
     <View style={styles.container}>
@@ -18,11 +36,29 @@ export default function DetailsScreen({ route }) {
       <View style={styles.infoContainer}>
         <View style={styles.infoItem}>
           <Text style={styles.label}>Código</Text>
-          <Text style={styles.value}>{pokemon.id}</Text>
+          <Text style={styles.value}>{pokemonApi.id}</Text>
         </View>
         <View style={styles.infoItem}>
           <Text style={styles.label}>Nome</Text>
-          <Text style={styles.value}>{pokemon.name}</Text>
+          <Text style={styles.value}>{pokemonApi.name}</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.label}>Altura</Text>
+          <Text style={styles.value}>{pokemonApi.height}</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.label}>Peso</Text>
+          <Text style={styles.value}>{pokemonApi.weight}</Text>
+        </View>
+        <View style={styles.infoItem}>
+          <Text style={styles.label}>Tipos</Text>
+          {pokemonApi.types.map((type) => {
+            return (
+              <Text key={type.type.name} style={styles.value}>
+                {type.type.name}
+              </Text>
+            );
+          })}
         </View>
       </View>
     </View>
