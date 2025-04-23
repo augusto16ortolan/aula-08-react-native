@@ -11,7 +11,7 @@ export default function PokemonCard({ pokemon, onPress }) {
       <View style={styles.card}>
         <Image
           source={{
-            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`,
+            uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`,
           }}
           style={styles.image}
         />
